@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.playground.expenses.expensedetails.event.ExpenseDetailsEvent
 import com.example.playground.expenses.expensedetails.state.ExpenseDetailsUIState
-import com.example.playground.expenses.expensesactivity.state.ExpensesActivityUIState
-import com.example.playground.expenses.expensesactivity.event.ExpensesActivityEvent
 import com.example.playground.ui.theme.PlaygroundTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

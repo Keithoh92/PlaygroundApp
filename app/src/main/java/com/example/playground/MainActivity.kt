@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.playground.expenses.expensedetails.navigation.expenseDetailsScreen
-import com.example.playground.expenses.expensesactivity.event.ExpensesActivityEvent
 import com.example.playground.expenses.expensesactivity.interactor.ExpensesActivityInteractor
 import com.example.playground.expenses.expensesactivity.interactor.ExpensesActivityInteractorEvents
 import com.example.playground.expenses.expensesactivity.navigation.expenseActivityScreen
