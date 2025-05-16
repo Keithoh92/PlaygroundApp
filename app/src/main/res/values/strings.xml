@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Playground</string>
+
+    <string name="something_went_wrong_try_again">Something went wrong, please try again</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="error_alert_title">Error</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="loading">Loading…</string>
+    <string name="retry">Retry</string>
 </resources>

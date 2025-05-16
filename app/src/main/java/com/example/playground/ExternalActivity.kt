@@ -8,10 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.playground.external.interactor.ExternalInteractor
-import com.example.playground.external.interactor.ExternalInteractorEvent
-import com.example.playground.external.navigation.externalScreen
-import com.example.playground.external.routes.ExternalScreens
+import com.example.playground.externalactivity.interactor.ExternalInteractor
+import com.example.playground.externalactivity.interactor.ExternalInteractorEvent
+import com.example.playground.externalactivity.navigation.externalScreen
+import com.example.playground.externalactivity.routes.ExternalScreens
 import com.example.playground.ui.theme.PlaygroundTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

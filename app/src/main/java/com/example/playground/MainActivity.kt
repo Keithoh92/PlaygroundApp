@@ -7,11 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.playground.expenses.expensedetails.navigation.expenseDetailsScreen
-import com.example.playground.expenses.expensesactivity.interactor.ExpensesActivityInteractor
-import com.example.playground.expenses.expensesactivity.interactor.ExpensesActivityInteractorEvents
-import com.example.playground.expenses.expensesactivity.navigation.expenseActivityScreen
-import com.example.playground.expenses.expensesactivity.routes.ExpensesScreens
+import com.example.playground.expensedetails.expensedetails.navigation.expenseDetailsScreen
+import com.example.playground.expensesactivity.interactor.ExpensesActivityInteractor
+import com.example.playground.expensesactivity.interactor.ExpensesActivityInteractorEvents
+import com.example.playground.expensesactivity.navigation.expenseActivityScreen
+import com.example.playground.expensesactivity.routes.ExpensesScreens
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,10 +26,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        /*
+        The interactor here is useful for uni directional data flow from the Screen -> Activity
+        We can pass with it an lambda that takes a parameter which will be used to fire whatever it is we
+        fetch from the activity back to the ViewModel.
+        */
         expensesActivityInteractor.onInteractorEvent {
             when (it) {
                 is ExpensesActivityInteractorEvents.FetchDataFromActivity ->
-                    mockActivityActions(it.onDataFetchedFromActivity)
+                    mockActivityActionsInteractor(it.onDataFetchedFromActivity)
             }
         }
 
@@ -43,6 +48,10 @@ class MainActivity : ComponentActivity() {
                 expenseActivityScreen(
                     interactor = expensesActivityInteractor,
                     navController = navController,
+                    fetchDataFromActivity = { screenEventLambda ->
+                        // Fetching data from activity using callback
+                        mockActivityActionsCallback(screenEventLambda)
+                    },
                 )
 
                 expenseDetailsScreen(navController = navController)
@@ -50,7 +59,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun mockActivityActions(onDataFetchedFromActivity: (String) -> Unit) {
+    private fun mockActivityActionsInteractor(onDataFetchedFromActivity: (String) -> Unit) {
+        val dataFetchedFromSomewhere = "Data Fetched from Activity"
+        onDataFetchedFromActivity(dataFetchedFromSomewhere)
+    }
+
+    private fun mockActivityActionsCallback(onDataFetchedFromActivity: (String) -> Unit) {
         val dataFetchedFromSomewhere = "Data Fetched from Activity"
         onDataFetchedFromActivity(dataFetchedFromSomewhere)
     }
