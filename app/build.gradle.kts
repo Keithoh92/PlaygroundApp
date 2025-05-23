@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.dagger.hilt.android)
-//    alias(libs.plugins.apollo)
     kotlin("kapt")
 }
 
@@ -12,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.playground"
-        minSdk = 24
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -32,6 +31,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -44,7 +45,14 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1}",
+                "/META-INF/LICENSE.md",
+                "/META-INF/LICENSE.txt",
+                "/META-INF/NOTICE.md",
+                "META-INF/LICENSE-notice.md",
+                "/META-INF/NOTICE.txt"
+            )
         }
     }
 
@@ -62,6 +70,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5") // latest as of 2025
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -72,7 +81,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.paging.testing.android)
     testImplementation(libs.junit)
-    testImplementation(libs.junit.jupiter.engine)
+    implementation(libs.junit.jupiter.engine)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -81,8 +90,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.dagger.hilt.android)
-//    implementation(libs.dagger.hilt.compiler)
-//    implementation(libs.androidx.hilt.compiler)
     kapt(libs.dagger.hilt.compiler)
 
     kapt(libs.androidx.hilt.compiler)
@@ -101,17 +108,7 @@ dependencies {
     implementation(libs.squareup.retrofit2.adapter.rxjava2)
     implementation(libs.squareup.retrofit2.converter.gson)
     implementation(libs.androidx.navigation.compose)
-//    implementation(libs.apollo.runtime)
-    testImplementation(libs.io.mockk)
+    implementation(libs.io.mockk)
     testImplementation(libs.turbine)
+    testImplementation(kotlin("test"))
 }
-
-//apollo {
-//    service("playground-service") {
-//        packageName.set("com.example.playground")
-//        introspection {
-//            endpointUrl.set("https://apollo-fullstack-tutorial.herokuapp.com/graphql")
-//            schemaFile.set(file("src/main/graphql/schema.graphqls"))
-//        }
-//    }
-//}

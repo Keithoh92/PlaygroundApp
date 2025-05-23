@@ -28,7 +28,7 @@ class ExternalViewModel @Inject constructor(): ViewModel() {
             is ExternalScreenEvent.OnReturnToExpensesScreen ->
                 navigateTo(ExternalScreenEffect.Navigation.NavigateBackToExpenses(event.result))
 
-            ExternalScreenEvent.FetchFromActivity -> fetchSomethingFromActivity()
+            is ExternalScreenEvent.FetchFromActivity -> fetchSomethingFromActivity()
             is ExternalScreenEvent.DataFetchedFromActivity -> handleDataFromActivity(event.data)
         }
     }
@@ -45,9 +45,13 @@ class ExternalViewModel @Inject constructor(): ViewModel() {
         })
     }
 
-    private fun handleDataFromActivity(data: String?) = viewModelScope.launch {
-        if (data != null) {
-            _effect.send(ExternalScreenEffect.Toast(data.toString()))
+    private fun showToastMessage(message: ExternalScreenEffect.Toast) = viewModelScope.launch {
+        _effect.send(message)
+    }
+
+    private fun handleDataFromActivity(data: String?) {
+        data?.run {
+            showToastMessage(ExternalScreenEffect.Toast(this))
         }
     }
 }

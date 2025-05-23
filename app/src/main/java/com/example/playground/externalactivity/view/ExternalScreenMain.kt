@@ -1,5 +1,6 @@
 package com.example.playground.externalactivity.view
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -8,38 +9,35 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.playground.externalactivity.effect.ExternalScreenEffect
-import com.example.playground.externalactivity.interactor.ExternalInteractor
-import com.example.playground.externalactivity.interactor.ExternalInteractorEvent
 import com.example.playground.externalactivity.viewmodel.ExternalViewModel
 
 @Composable
 fun ExternalScreenMain(
     viewModel: ExternalViewModel,
-    interactor: ExternalInteractor
+    fetchDataFromActivity: ((String) -> Unit) -> Unit,
 ) {
-
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val activity = context as? Activity
 
     LaunchedEffect(lifecycleOwner) {
         if (lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             viewModel.effect.collect { effect ->
                 when (effect) {
                     is ExternalScreenEffect.Toast -> {
-                        showToastMessage(
-                            context,
-                            this.toString()
-                        )
+                        showToastMessage(context, effect.message)
                     }
-                    is ExternalScreenEffect.Navigation.NavigateBackToExpenses ->
-                        interactor.backToExpenses(
-                            ExternalInteractorEvent.OnBackToExpenses(effect.intent)
-                        )
 
-                    is ExternalScreenEffect.FetchFromActivity ->
-                        interactor.fetchDataFromActivity(
-                            ExternalInteractorEvent.FetchDataFromActivity(effect.onFetchedData)
-                        )
+                    is ExternalScreenEffect.Navigation.NavigateBackToExpenses -> {
+                        activity?.setResult(Activity.RESULT_OK, effect.intent)
+                        activity?.finish()
+                    }
+
+                    is ExternalScreenEffect.FetchFromActivity -> {
+                        fetchDataFromActivity { dataFetched ->
+                            (effect.onFetchedData.invoke(dataFetched))
+                        }
+                    }
                 }
             }
         }
